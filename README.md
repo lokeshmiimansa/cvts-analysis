@@ -5,7 +5,8 @@
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-
+ 
+## DirectoryStructure
 
 cvts-analysis/
 ├── scripts/        ← all .py files are here 
