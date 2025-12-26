@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVTS REPORT</title>
+    <style>
+        :root {
+            --accent: #f47d24;
+            --text: #222222;
+            --bg: #f5f5f5;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        p {
+            text-align: justify;
+        }
+
+        /* header layout - UPDATED FOR STACKED LAYOUT */
+        .top-bar {
+            display: flex;
+            flex-direction: column;
+            /* This stacks the blocks vertically */
+            align-items: center;
+            /* This centers the blocks */
+            justify-content: center;
+            padding: 18px 48px;
+            background: var(--white);
+            border-bottom: 4px solid var(--accent);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* left side: logos + title */
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            /* Ensure the block takes full width to help centering if needed, 
+               or keep it auto to stay compact */
+            margin-bottom: 16px;
+            /* Adds space between Title and Nav */
+        }
+
+        .brand-logos {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .brand-logo {
+            width: 170px;
+            /* Reduced slightly to save vertical space in sticky header */
+            height: auto;
+        }
+
+        /* vertical accent line between logos and title */
+        .brand-divider {
+            width: 2px;
+            height: 56px;
+            background: var(--accent);
+            border-radius: 999px;
+        }
+
+
+
+        /* nav links */
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            font-weight: 500;
+            width: 100%;
+            justify-content: center;
+            /* Centers the links horizontally */
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            /* Optional: Adds a subtle divider line */
+        }
+
+        .nav-links a {
+            position: relative;
+            text-decoration: none;
+            color: var(--accent);
+            font-size: 0.98rem;
+        }
+
+        /* subtle underline hover */
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.2s ease-out;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* page title section */
+        main {
+            max-width: 960px;
+            margin: 48px auto;
+            padding: 32px 40px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        main h2 {
+            text-align: left;
+            margin: 0;
+            font-family: "Montserrat", system-ui, sans-serif;
+        }
+
+        /* report title */
+        .report-name {
+            margin: 0;
+            font-family: "Montserrat", system-ui, sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .report-main {
+            max-width: 100%;
+            margin: 32px 0 64px;
+            padding: 0 64px 32px;
+            /* side + bottom padding */
+            background: #f5f5f5;
+            /* light page background */
+            box-sizing: border-box;
+        }
+
+        /* individual cards */
+        .report-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-top: 24px;
+            box-shadow: 0 10px 24px rgba(54, 53, 53, 0.06);
+        }
+
+        /* spacing rhythm between cards */
+        .report-card+.report-card {
+            margin-top: 24px;
+        }
+
+        /* headings and text inside cards */
+        .report-card h2 {
+            margin: 0 0 12px;
+            font-size: 1.25rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #070300;
+        }
+
+        .report-card p {
+            margin: 0;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: #333333;
+        }
+
+        .summary-table {
+            border-collapse: collapse;
+            width: 100%;
+            padding: 2%;
+            font-size: 0.95rem;
+            background-color: #e8e8e89f;
+        }
+
+        .summary-table caption {
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 6px;
+            background-color: #dddddd;
+        }
+
+        /* 1. General Rule: Default to Right Alignment (for numbers) */
+        .summary-table th,
+        .summary-table td {
+            text-align: right;
+            /* Numeric values and numeric headers go right */
+            padding: 6px 12px;
+            /* Adjusted padding for better readability */
+            border-bottom: 1px solid #e0e0e0;
+            /* Optional: adds subtle separation */
+        }
+
+        /* 2. Specific Rule: First Column Only (for text labels) */
+        .summary-table th:first-child,
+        .summary-table td:first-child {
+            text-align: left;
+            /* Text labels and text headers go left */
+        }
+
+        /* Optional: Ensure the caption stays centered or left as preferred */
+        .summary-table caption {
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 8px;
+            padding: 8px;
+            background-color: #dddddd;
+        }
+
+        /* light bottom line between tbody blocks */
+        .summary-table tbody.section {
+            border-top: 1px solid #dddddd;
+            margin-top: 4px;
+            /* visual gap (via border) */
+        }
+
+        .chart {
+            margin: 24px auto;
+            text-align: center;
+        }
+
+        .chart img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .figure-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: space-between;
+        }
+
+        /* each figure takes about half the row, but can shrink */
+        .figure-row .chart {
+            flex: 1 1 calc(50% - 16px);
+            /* two per row */
+            max-width: calc(50% - 16px);
+            margin: 0;
+        }
+
+        .figure-row .chart img {
+            width: 100%;
+            /* scale image down to fit */
+            height: auto;
+            display: block;
+        }
+
+        .chart figcaption {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #555555;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Interactive Plot Styles */
+        .interactive-container {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .control-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .control-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .control-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(244, 125, 36, 0.2);
+        }
+
+        #plot-frame {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            display: block;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const procSelect = document.getElementById('procedure-select');
+            const measureSelect = document.getElementById('measure-select');
+            const plotFrame = document.getElementById('plot-frame');
+            function updatePlot() {
+                const procId = procSelect.value;
+                const measureId = measureSelect.value;
+                if (procId && measureId) {
+                    // Constructs URL: plots/PROCEDUREID_MEASUREMENTID.html
+                    // You can change the extension to .png or .jpg if you are serving static images instead.
+                    const plotUrl = `plot/${procId}_${measureId}.html`;
+                    plotFrame.src = plotUrl;
+                }
+            }
+            procSelect.addEventListener('change', updatePlot);
+            measureSelect.addEventListener('change', updatePlot);
+        });
+    </script>
+
+</head>
+
+<body>
+    <div id="password-overlay">
+        <div class="login-box">
+            <div class="brand-block" style="justify-content: center; margin-bottom: 20px;">
+                <div class="brand-logos" style="flex-direction: row; align-items: center;">
+                    <img src="bridgecloud.svg" alt="Bridge Cloud" class="brand-logo" style="height: 40px; width: auto;">
+                    <div style="width: 2px; height: 30px; background: #f47d24; margin: 0 10px;"></div>
+                    <img src="miimansa.svg" alt="Miimansa" class="brand-logo" style="height: 40px; width: auto;">
+                </div>
+            </div>
+            <h2 style="text-align: center; color: var(--text); margin-top: 0;">Restricted Access</h2>
+            <p style="text-align: center; margin-bottom: 20px;">Please enter the password to view this report.</p>
+
+            <input type="password" id="password-input" placeholder="Enter Password" onkeyup="checkForEnter(event)">
+            <p id="error-message">Incorrect password</p>
+            <button onclick="checkPassword()">View Report</button>
+        </div>
+    </div>
+
+    <style>
+        /* Stop the page from scrolling while locked */
+        body.locked {
+            overflow: hidden;
+        }
+
+        /* Overlay Styles */
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f5f5f5;
+            /* Matches your bg variable */
+            z-index: 99999;
+            /* Sits on top of everything */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            border-top: 4px solid #f47d24;
+            /* Matches your accent */
+        }
+
+        #password-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            /* Ensures padding doesn't break width */
+        }
+
+        #password-input:focus {
+            outline: none;
+            border-color: #f47d24;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #f47d24;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .login-box button:hover {
+            background-color: #d66a1b;
+        }
+
+        #error-message {
+            color: red;
+            font-size: 0.9rem;
+            display: none;
+            /* Hidden by default */
+            text-align: center;
+            margin-top: -5px;
+            margin-bottom: 15px;
+        }
+    </style>
+
+    <script>
+        // 1. SET YOUR PASSWORD HERE
+        const reportPassword = "cvts0987";
+
+        // Lock body scroll immediately
+        document.body.classList.add('locked');
+
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            const errorMsg = document.getElementById('error-message');
+            const overlay = document.getElementById('password-overlay');
+
+            if (input === reportPassword) {
+                // Unlock
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    document.body.classList.remove('locked');
+                }, 300); // smooth fade out
+            } else {
+                // Show error
+                errorMsg.style.display = 'block';
+                document.getElementById('password-input').value = '';
+            }
+        }
+
+        // Allow pressing "Enter" key
+        function checkForEnter(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <header class="top-bar">
+        <div class="brand-block">
+            <div class="brand-logos">
+                <img src="bridgecloud.svg" alt="Bridge Cloud" class="brand-logo">
+                <img src="miimansa.svg" alt="Miimansa" class="brand-logo">
+            </div>
+            <div class="brand-divider"></div>
+            <!-- <h1 class="report-name">CVTS Outcomes versus Length of Stay: Analysis of Real World Data from a Tertiary
+                Care Facility</h1> -->
+            <h1 class="report-name">
+                CVTS Outcomes versus Length of Stay: <br>
+                Analysis of Real World Data from a Tertiary Care Facility
+            </h1>
+        </div>
+
+        <nav class="nav-links">
+            <a href="#intro">Introduction</a>
+            <a href="#objective">Objective</a>
+            <a href="#data">Data</a>
+            <a href="#methods">Methods</a>
+            <a href="#results">Results</a>
+            <a href="#conclusion">Conclusion</a>
+        </nav>
+    </header>
+
+
+    <main class="report-main">
+        <section id="intro" class="report-card">
+            <h2>1. Introduction</h2>
+            <!-- <p>Cardiovascular and thoracic surgery is a specialized medical field focused on the surgical treatment of
+                conditions affecting the heart, lungs, and other thoracic cavity structures. The report demonstrates
+                calculation of mortality rate, frequency or occurrence , distinct patient count and length of stay(los)
+                over different medical procedure and different condition.</p> -->
+            <p>
+                Implementing Enhanced Recovery After Surgery (ERAS) protocols in cardiovascular and thoracic surgery
+                (CVTS) is
+                critical for optimizing recovery, yet these standards must be adapted using rigorous,
+                population-specific data <a href="#ref1"
+                    style="text-decoration: none; color: var(--accent); font-weight: bold;">[1]</a>.
+                To the best of our knowledge, this report presents the first extensive characterization of CVTS outcomes
+                and their
+                association with Length of Stay (LOS) within an Indian patient population. By leveraging real-world
+                clinical data,
+                we aim to inform data-driven rehabilitation definitions that bridge the gap between global guidelines
+                and local
+                clinical reality.
+            </p>
+        </section>
+
+
+        <section id="objective" class="report-card">
+            <h2>2. Objective</h2>
+            <p>
+                The objective of this analysis is to <b>evaluate the relationship between post-operative Length of Stay
+                    (LoS) and patient outcomes</b> in the Cardiovascular and Thoracic Surgery (CVTS) department, using
+                real-world data derived from the OMOP Common Data Model.
+                </br>
+                Specifically, this analysis aims to:
+            </p>
+            <ul align="justify">
+                <li><b>Assess whether shorter post-surgical hospital stays are associated with comparable or improved
+                        clinical outcomes</b>, when measured against existing post-operative care guidelines.</li>
+                <li><b>Examine outcome indicators</b> such as post-discharge complications, readmissions, mortality, and
+                    need for re-intervention across varying Length of Stay categories.</li>
+                <li><b>Identify patient subgroups</b> (based on age, procedure type, comorbidities, and peri-operative
+                    risk factors) for whom early discharge may be clinically safe and effective.</li>
+                <li><b>Generate evidence-based analysis</b> to support or challenge current guideline-driven Length of
+                    Stay recommendations using institutional data.</li>
+            </ul>
+            <p>
+                This analysis leverages longitudinal, standardized clinical data from approximately 1,000 CVTS patients,
+                enabling an objective, outcome-focused evaluation of whether earlier discharge strategies can be safely
+                considered without adversely impacting patient outcomes.
+            </p>
+        </section>
+
+
+        <section id="data" class="report-card">
+            <h2>3. Data</h2>
+            <p>The dataset belongs to patient undergone Cardio Vascular Thoracic Surgery for headcount of 1147, the
+                total visit occurrence was 9433 with cumulative IPD admissions of 1580.</p>
+            <h3>3.1. Summary Statistics</h3>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Metric</th>
+                        <th scope="col">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Total Patients</th>
+                        <td>1147</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Male</th>
+                        <td>666</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Female</th>
+                        <td>481</td>
+                    </tr>
+                </tbody>
+                <tbody class="section">
+                    <tr>
+                        <th scope="row">Total Visits</th>
+                        <td>9433</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total Procedure Types</th>
+                        <td>27</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total Admission</th>
+                        <td>1580</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Deceased</th>
+                        <td>90</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3>3.2. Surgical Procedures Analysed</h3>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <!-- <th scope="col">Procedure Concept ID</th> -->
+                        <th scope="col">Procedure Name</th>
+                        <th scope="col">Distinct Patient Count</th>
+                        <th scope="col">Distinct Procedure Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <!-- <td>4012932</td> -->
+                        <td>Atrioseptoplasty</td>
+                        <td>162</td>
+                        <td>170</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>4019929</td> -->
+                        <td>Repair of Tetralogy of Fallot</td>
+                        <td>33</td>
+                        <td>36</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>4095407</td> -->
+                        <td>Replacement of Aortic Valve</td>
+                        <td>78</td>
+                        <td>81</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>4142628</td> -->
+                        <td>Pericardiectomy</td>
+                        <td>32</td>
+                        <td>35</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>4203153</td> -->
+                        <td>Replacement of Mitral Valve</td>
+                        <td>276</td>
+                        <td>288</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>4284104</td> -->
+                        <td>Aortocoronary Artery Bypass Graft</td>
+                        <td>302</td>
+                        <td>329</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>4294387</td> -->
+                        <td>Correction of Ventricular Septal Defect</td>
+                        <td>41</td>
+                        <td>43</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>4302815</td> -->
+                        <td>Robot Assisted Laparoscopic Coronary Artery Bypass</td>
+                        <td>37</td>
+                        <td>37</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>4304688</td> -->
+                        <td>Double Valve Replacement</td>
+                        <td>75</td>
+                        <td>79</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>3.3. Frequency by Procedure</h3>
+            <div style="overflow-x: auto;">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Procedure</th>
+                            <th scope="col">Prothrombin Time (PT)</th>
+                            <th scope="col">Creatinine Ratio </th>
+                            <th scope="col">Glucose IV (dose mass)</th>
+                            <th scope="col">LDH Panel </th>
+                            <th scope="col">Glycosylated Haemoglobin</th>
+                            <th scope="col">aPTT Ratio </th>
+                            <th scope="col">LDH Urine</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Atrioseptoplasty</td>
+                            <td>371</td>
+                            <td>832</td>
+                            <td>406</td>
+                            <td>182</td>
+                            <td>57</td>
+                            <td>100</td>
+                            <td>168</td>
+                        </tr>
+                        <tr>
+                            <td>Repair of tetralogy of Fallot</td>
+                            <td>127</td>
+                            <td>304</td>
+                            <td>135</td>
+                            <td>67</td>
+                            <td>19</td>
+                            <td>65</td>
+                            <td>48</td>
+                        </tr>
+                        <tr>
+                            <td>Replacement of aortic valve</td>
+                            <td>452</td>
+                            <td>489</td>
+                            <td>232</td>
+                            <td>135</td>
+                            <td>43</td>
+                            <td>37</td>
+                            <td>86</td>
+                        </tr>
+                        <tr>
+                            <td>Pericardiectomy</td>
+                            <td>62</td>
+                            <td>201</td>
+                            <td>91</td>
+                            <td>37</td>
+                            <td>18</td>
+                            <td>22</td>
+                            <td>45</td>
+                        </tr>
+                        <tr>
+                            <td>Replacement of mitral valve</td>
+                            <td>1754</td>
+                            <td>1582</td>
+                            <td>751</td>
+                            <td>408</td>
+                            <td>134</td>
+                            <td>170</td>
+                            <td>335</td>
+                        </tr>
+                        <tr>
+                            <td>Aortocoronary artery bypass graft</td>
+                            <td>539</td>
+                            <td>1704</td>
+                            <td>823</td>
+                            <td>492</td>
+                            <td>165</td>
+                            <td>148</td>
+                            <td>340</td>
+                        </tr>
+                        <tr>
+                            <td>Correction of ventricular septal defect</td>
+                            <td>114</td>
+                            <td>246</td>
+                            <td>130</td>
+                            <td>54</td>
+                            <td>19</td>
+                            <td>47</td>
+                            <td>58</td>
+                        </tr>
+                        <tr>
+                            <td>Robot assisted laparoscopic coronary artery bypass</td>
+                            <td>39</td>
+                            <td>160</td>
+                            <td>75</td>
+                            <td>45</td>
+                            <td>18</td>
+                            <td>18</td>
+                            <td>25</td>
+                        </tr>
+                        <tr>
+                            <td>Double valve replacement</td>
+                            <td>608</td>
+                            <td>461</td>
+                            <td>169</td>
+                            <td>154</td>
+                            <td>40</td>
+                            <td>36</td>
+                            <td>88</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+
+        <section id="methods" class="report-card">
+            <h2>4. Methods</h2>
+
+            <h3>4.1. Study Design and Data Source</h3>
+            <p>
+                This retrospective cohort study utilized structured electronic health record (EHR) data from the
+                <strong>Cardiovascular and Thoracic Surgery (CVTS)</strong> department, covering the period from
+                <strong>January 2023 to May 2024</strong>. All source data were standardized and harmonized using the
+                <strong>OMOP Common Data Model (CDM)</strong> to enable consistent longitudinal analysis across clinical
+                domains.
+            </p>
+
+
+
+
+            <h3>4.2. Length of Stay Assessment</h3>
+            <p>
+                Length of Stay (LOS) was calculated for each CVTS admission as the difference between admission date and
+                discharge date recorded in the <code>visit occurrence</code> table. LOS was treated as a continuous
+                variable
+                and subsequently categorized into clinically meaningful strata aligned with post-operative care
+                practices
+                and guideline-based expectations.
+            </p>
+
+            <h3>4.3. Clinical Measurement Selection</h3>
+            <p>
+                Laboratory and clinical measurement data were extracted from the <code>measurement</code> table and
+                filtered
+                to retain Lab markers considered relevant to post-operative recovery and Enhanced Recovery After Surgery
+                (<strong>ERAS</strong>) pathways. These included markers spanning:
+            </p>
+            <ul>
+                <li>Pre-operative baseline assessment</li>
+                <!-- <li>Intra-operative physiological impact</li> -->
+                <li>Post-operative recovery and complication monitoring</li>
+            </ul>
+            <p>
+                Selection of Lab markers and temporal windows was informed by published ERAS and LOS-related literature,
+                ensuring clinical relevance and interpretability.
+            </p>
+
+            <h3>4.4. Outcomes</h3>
+            <p>
+                Primary clinical outcomes were derived using standardized OMOP domain tables as follows:
+            </p>
+            <ul>
+                <li>
+                    <strong>30-day readmission:</strong> Defined as any inpatient visit occurring within 30 days of
+                    discharge from the index CVTS admission.
+                </li>
+                <li>
+                    <strong>30-day post-operative mortality:</strong> Determined using death records occurring within
+                    30 days of the index discharge date.
+                </li>
+                <li>
+                    <strong>Re-surgery:</strong> Identified as any subsequent CVTS-related procedure occurring after the
+                    index surgery.
+                </li>
+            </ul>
+
+            <h3>4.5. Exploratory Data Analysis</h3>
+
+            <p>
+                Exploratory data analysis (EDA) was performed to characterise patient demographics, clinical variables,
+                and outcome distributions within the CVTS cohort. Particular emphasis was placed on examining
+                therelationship between <strong>Length of Stay (LOS)</strong> and key post-operative outcomes.
+            </p>
+
+            <p>
+                Outcomes were evaluated in relation to Length of Stay to assess whether variations in post-operative LOS
+                were associated with differences in clinical outcomes. Comparative analyses were conducted across LOS
+                strata to identify patterns suggestive of safe early discharge versus increased risk profiles.
+            </p>
+
+            <p>
+                All analyses were performed using OMOP-standardized data structures to ensure transparency,
+                reproducibility, and alignment with real-world evidence best practices.
+            </p>
+
+            <h3>4.6. Ethical and Data Governance Considerations</h3>
+            <p>
+                All data used in this study were de-identified using PrivacyBridgeAI prior to analysis. The study
+                involved retrospective
+                analysis of routinely collected clinical data and did not influence patient care decisions.
+            </p>
+
+            <section id="ethical" class="report-card">
+                <h3>4.7. Ethical and Data Governance Considerations</h3>
+                <p>
+                    All data used in this study were de-identified using the <strong>PrivacyBridgeAI</strong>
+                    <!-- <a href="#ref2" style="text-decoration: none; color: var(--accent); font-weight: bold;">[2]</a> -->
+                    prior to analysis. The study involved retrospective analysis of routinely collected clinical data
+                    processed on the <strong>Bridge Cloud</strong> platform
+                    <a href="#ref2" style="text-decoration: none; color: var(--accent); font-weight: bold;">[2]</a>
+                    and did not influence patient care decisions.
+                </p>
+            </section>
+
+        </section>
+
+
+        <section id="data-analysis" class="report-card">
+            <h2>5. Data Analysis</h2>
+            <h3>5.1. Mortality Rate</h3>
+            <p>
+                Mortality was assessed overall and by gender for 1,147 patients who underwent cardiovascular and
+                thoracic surgery.
+            </p>
+
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Total Patients</th>
+                        <th scope="col">Deaths</th>
+                        <th scope="col">Mortality (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">All</th>
+                        <td>1147</td>
+                        <td>90</td>
+                        <td>7.85</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Male</th>
+                        <td>666</td>
+                        <td>54</td>
+                        <td>8.11</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Female</th>
+                        <td>481</td>
+                        <td>36</td>
+                        <td>7.48</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/mortality_age_categorisation.png" alt="Age distribution of patients who died">
+                    <figcaption>
+                        Figure 5.1.1. Age categorization of patients who died, highlighting higher mortality in older
+                        age groups.
+                    </figcaption>
+                </figure>
+                <figure class="chart">
+                    <img src="images/days_from_procedure_to_death_hist.png"
+                        alt="Distribution of days from procedure to death" id="figure-5-1-2">
+                    <figcaption>
+                        Figure 5.1.2. Distribution of days from procedure to death; the majority of deaths occurred
+                        within 30 days after surgery, with relatively few late events.
+                    </figcaption>
+                </figure>
+            </div>
+
+
+            <h3>5.2. Length of Stay</h3>
+            <p>
+                Overall, LOS demonstrated a right-skewed distribution, with the majority of patients being discharged
+                within the first few weeks following surgery. The mean LOS was 14.5 days, while the median LOS was 11.0
+                days, indicating that a relatively small subset of patients experienced prolonged hospitalizations,
+                thereby increasing the overall average LOS.
+            </p>
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/percentage_distribution_los.png" alt="Age distribution of patients who died">
+                    <figcaption>Figure 5.2.1. Distribution of length of stay (LOS) for all patients, showing
+                        that most patients were discharged within the first few weeks </figcaption>
+                </figure>
+                <!-- <figure class="chart">
+                    <img src="images/average_los_age-scatterplot.png" alt=""></img>
+                    <figcaption>Figure 5.2.2. Frequency distribution of length of stay (LOS), showing that most patients
+                        were discharged within the first few weeks after surgery.</figcaption>
+                </figure> -->
+                <figure class="chart">
+                    <img src="images/length of each patient.png" alt="Length of Stay of Each Patient"></img>
+                    <figcaption>Figure 5.2.2. Length of stay (LOS) by gender, comparing the number of male and female
+                        patients across stay durations.</figcaption>
+                </figure>
+                <figure class="chart">
+                    <img src="images/Average_los_with_procedure.png" alt="Average Length of Stay upon each Procedure">
+                    <figcaption>Figure 5.2.3. Median length of stay for each surgical procedure. </figcaption>
+                </figure>
+                <p><i>Analysis: "Repair of tetralogy of fallot" surgeries resulted in the longest average hospital stay
+                        (43 days), while "Replacement of mitral valve" had the shortest average stay of 14 days among
+                        the analyzed procedures.</i></p>
+                <p>
+
+                </p>
+            </div>
+            <h3>5.3. Re-Admission</h3>
+            <p>
+                Thirty-day readmission was assessed for all CVTS discharges by identifying subsequent inpatient visits
+                recorded in the OMOP visit occurrence table and linking them back to the index surgical admission. The
+                primary objective was to evaluate time to readmission and examine whether earlier discharge was
+                associated with an increased likelihood of unplanned hospital return.
+            </p>
+            <p>
+                The distribution of time to readmission (0–90 days) showed a pronounced concentration of readmissions
+                occurring shortly after discharge, with a gradual tapering over time. A substantial proportion of
+                readmissions occurred within the first 30 days, as highlighted by the vertical threshold line,
+                indicating a period of heightened vulnerability following discharge. Beyond 30 days, readmissions were
+                more dispersed, suggesting a mix of delayed postoperative complications and disease progression rather
+                than immediate post-surgical issues.
+            </p>
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/readmission.png" alt="Age distribution of patients who died">
+                    <figcaption>Figure 5.3.1: Distribution of Time to Readmission (0–90 Days) Histogram showing the
+                        frequency of patient returns relative to days post-discharge.</figcaption>
+                </figure>
+                <figure class="chart">
+                    <img src="images/readmission_categorisation.png" alt="Age distribution of patients who died">
+                    <figcaption>Figure 5.3.2: Proportion of Readmissions by Category Breakdown of patient readmissions
+                        classified as Early (≤30 days), Normal, or Late.</figcaption>
+                </figure>
+                <figure class="chart">
+                </figure>
+            </div>
+            <p>
+                To further characterise this pattern, readmissions were categorised into early (≤30 days), normal (31–90
+                days), and late (>90 days) groups. Early readmissions constituted the largest share, accounting for
+                45.1% of all readmitted patients, followed by normal readmissions at 28.1%, and late readmissions at
+                26.8%. The predominance of early readmissions suggests that nearly half of hospital returns occurred
+                during the immediate post-discharge phase, a period commonly associated with surgical complications,
+                inadequate recovery, or suboptimal discharge planning.
+            </p>
+
+        </section>
+
+
+        <section id="results" class="report-card">
+            <h2>6. Results</h2>
+            <h3>6.1. Peri‑Operative Lab marker Trends Analysis</h3>
+            <p>
+                For each of the nine index procedures, patient‑level line plots were generated for all study Lab markers
+                (for example, creatinine in peritoneal fluid/serum, lactate, troponin, coagulation and electrolyte
+                markers). Measurements were time‑aligned to the day of surgery (t = 0), so that both pre‑operative (t
+                &lt; 0) and post‑operative (t &gt; 0) trajectories could be visualised on the same scale.
+            </p>
+            <p>
+                Plots were produced in batches of 25 patients per procedure, with a vertical dashed line marking the
+                procedure time and horizontal reference bands showing expected ranges. These peri‑operative profiles
+                were used to screen for Lab marker excursions after surgery, compare patterns across procedures, and
+                identify markers associated with prolonged length of stay, complications or 30‑day readmission.
+            </p>
+            <!-- <h3>6.2. Post‑Operative Biomarker Trends Analysis</h3>
+            <p>
+                Post‑operative trajectories (t &gt; 0) of key biomarkers were examined to characterise recovery patterns
+                after surgery. For each procedure, line plots and summary statistics were used to assess how quickly
+                markers such as creatinine ratio, lactate, troponin and coagulation parameters returned to their
+                expected reference ranges.
+            </p>
+            <p>
+                Patients with sustained post‑operative abnormalities or sharp rises in these biomarkers were flagged and
+                compared with those showing rapid normalisation in terms of length of stay, 30‑day readmission,
+                re‑operation and post‑operative mortality. This analysis helped identify post‑operative risk signatures
+                that may be relevant for ERAS‑guided monitoring and discharge decisions.
+            </p>
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/Creatinine_in_peritoneal_fluid___serum.png"
+                        alt="Creatinine in peritoneal fluid/serum vs time for a CVTS procedure">
+                    <figcaption>
+                        Figure 6.1. Creatinine in peritoneal fluid / serum over time for patients undergoing a selected
+                        CVTS procedure, aligned at the day of surgery (t = 0). Pre‑operative values are mostly within
+                        the reference band, while some patients show post‑operative rises.
+                    </figcaption>
+                </figure>
+
+                <figure class="chart">
+                    <img src="images/Prothrombin_time__PT.png" alt="Prothrombin time vs time for a CVTS procedure">
+                    <figcaption>
+                        Figure 6.2. Prothrombin time (PT) trajectories around surgery for a CVTS procedure cohort,
+                        demonstrating stable pre‑operative PT with substantial post‑operative variability and occasional
+                        extreme prolongation.
+                    </figcaption>
+                </figure>
+            </div> -->
+
+            <h3>6.2.1. Interactive Lab marker Analysis</h3>
+            <div class="interactive-container">
+
+                <p>Select a procedure and a measurement to view the specific analysis plot.</p>
+                <div class="control-row">
+                    <div class="control-group">
+                        <label for="procedure-select">Procedure</label>
+                        <select id="procedure-select">
+                            <option value="">-- Select Procedure --</option>
+                            <option value="4012932">Atrioseptoplasty (4012932)</option>
+                            <option value="4019929">Repair of tetralogy of Fallot (4019929)</option>
+                            <option value="4095407">Replacement of aortic valve (4095407)</option>
+                            <!-- <option value="4142628">Pericardiectomy (4142628)</option> -->
+                            <option value="4203153">Replacement of mitral valve (4203153)</option>
+                            <option value="4284104">Aortocoronary artery bypass graft (4284104)</option>
+                            <option value="4294387">Correction of ventricular septal defect (4294387)</option>
+                            <option value="4302815">Robot assisted laparoscopic coronary artery bypass (4302815)
+                            </option>
+                            <option value="4304688">Double valve replacement (4304688)</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="measure-select">Measurement (Lab marker)</label>
+                        <select id="measure-select">
+                            <option value="">-- Select Measurement --</option>
+                            <option value="3034426">Prothrombin time (PT)</option>
+                            <option value="42868738">Creatinine in peritoneal fluid / Serum</option>
+                            <option value="3049746">Glucose IV (dose mass)</option>
+                            <option value="3034022">Lactate dehydrogenase panel</option>
+                            <option value="40765586">Glycosylated hemoglobin</option>
+                            <option value="3041944">aPTT ratio</option>
+                            <option value="3027193">Lactate dehydrogenase – urine</option>
+                            <option value="3034426">Prothrombin time (PT)</option>
+                            <option value="3005872">Hemoglobin [Presence] in Blood</option>
+                            <option value="3050583">Platelets panel - Blood by Automated count</option>
+                            <option value="42868738">Creatinine in peritoneal fluid/Creatinine in serum</option>
+                            <option value="36305724">Potassium [Mass/volume] in Specimen</option>
+                            <option value="36303488">Sodium [Mass/mass] in Specimen</option>
+                            <option value="3034734">Urea [Mass/volume] in Urine</option>
+                            <option value="40762632">Urea nitrogen [Moles/volume] in Blood</option>
+                            <option value="1761868">Lipid panel - Serum or Plasma</option>
+                            <!-- <option value="3018056">Glucose PO (dose mass)</option>
+                            <option value="40761507">Platelet morphology panel</option>
+                            <option value="1988947">Procalcitonin</option>
+                            <option value="40762141">Lactate / pyruvate ratio</option> -->
+                            <!-- <option value="3002937">Fibrinogen</option>
+                            <option value="3017250">Creatinine – urine</option>
+                            <option value="3021337">Troponin I (cardiac)</option> -->
+                        </select>
+                    </div>
+                </div>
+                <iframe id="plot-frame" src="about:blank" title="Data Analysis Plot"></iframe>
+            </div>
+
+
+
+            <!-- <h3>6.3. Length of stay and mortality</h3>
+            <p>
+            Patients who died had markedly longer total and post‑procedure hospital stays, with a broader spread and more extreme outliers than survivors, indicating that mortality was often preceded by prolonged and complicated admissions.
+            </p>
+
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/mortality_los_dependecy.png"
+                        alt="Boxplot of length of stay by death status and LOS type">
+                    <figcaption>
+                    Figure 6.3. Boxplots of total and post‑procedure length of stay (LOS) for non‑deceased and deceased patients, showing higher and more variable LOS among those who died.
+                    </figcaption>
+                </figure>
+            </div> -->
+
+
+        </section>
+
+
+        <section id="conclusion" class="report-card">
+            <h2>7. Conclusion</h2>
+            <h3>7.1. Length of stay and timing of death</h3>
+            <p>
+                To assess how mortality relates to hospital stay, two complementary analyses were performed. First,
+                boxplots of total and post‑procedure length of stay were stratified by death status. Deceased patients
+                showed higher median LOS and a wider spread with many extreme outliers, indicating that deaths were
+                often preceded by prolonged and complicated admissions.
+            </p>
+            <p>
+                Second, a histogram of days from procedure to death <a href="#figure-5-1-2">Figure 5.1.2.</a> showed
+                that most deaths occurred within the first 30 days after surgery, with only a small number of late
+                deaths beyond 60–90 days. This pattern suggests that the early post‑operative period is the highest‑risk
+                window and that prolonged LOS in this phase may signal deteriorating clinical status.
+            </p>
+            <!-- <p>
+            Although a broad panel of ERAS‑relevant laboratory measurements was initially considered, only a subset of biomarkers had sufficient peri‑ and post‑operative data for meaningful time‑series analysis. The final CVTS biomarker analysis therefore focused on coagulation, renal and metabolic markers listed below.
+            </p> -->
+
+            <!-- <table class="summary-table">
+            <thead>
+                <tr>
+                <th scope="col">Measurement Concept Id</th>
+                <th scope="col">Biomarker used in analysis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td>3034426</td>
+                <td>Prothrombin time (PT)</td>
+                </tr>
+                <tr>
+                <td>42868738</td>
+                <td>Creatinine in peritoneal fluid / Creatinine in serum</td>
+                </tr>
+                <tr>
+                <td>049746</td>
+                <td>Glucose IV (dose mass)</td>
+                </tr>
+                <tr>
+                <td>3034022</td>
+                <td>Lactate dehydrogenase panel – serum or plasma</td>
+                </tr>
+                <tr>
+                <td>40765586</td>
+                <td>Glycated haemoglobin (long‑term glucose)</td>
+                </tr>
+                <tr>
+                <td>3041944</td>
+                <td>Activated partial thromboplastin time (aPTT)</td>
+                </tr>
+                <tr>
+                <td>3027193</td>
+                <td>Lactate dehydrogenase – urine</td>
+                </tr>
+            </tbody>
+            </table> -->
+            </br>
+
+            <p>
+                Overall, the analysis suggests that extended total and post‑procedure LOS is strongly associated with
+                in‑hospital mortality, re-admission and complications highlighting the need for early identification of
+                patients whose recovery deviates from the expected trajectory.
+            </p>
+            <h3>7.2. Length of Stay and Mortality</h3>
+            <p>
+                To explore the relationship between hospital stay and mortality, boxplots were generated for total
+                length of stay and post‑procedure length of stay, stratified by death status (non‑deceased vs deceased).
+                Both metrics showed higher medians and wider IQRs in the deceased group, with a greater number of
+                extreme outliers, suggesting that prolonged admissions and complicated post‑operative courses were more
+                common among patients who died.
+            </p>
+            <p>
+                In contrast, non‑deceased patients had shorter and more tightly clustered stays, particularly for
+                post‑procedure LOS, consistent with smoother recoveries and earlier discharge under ERAS pathways.
+            </p>
+            </br>
+            <p>
+                Out of the 90 deaths observed in the CVTS data, 84 death occurred for the listed surgery and 73 occurred
+                within 30 days of surgery, indicating that early post‑operative mortality accounts for the vast majority
+                of fatal events and highlighting the first month after surgery as the highest‑risk period for patients.
+            </p>
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/los_vs_mortality.png"
+                        alt="Distribution of total length of stay stratified by in-hospital mortality status">
+                    <figcaption>
+                        Figure 7.2.1. Total length of stay (LOS) by in‑hospital mortality status (is_death = 0 vs 1),
+                        showing longer and more variable LOS among patients who died.
+                    </figcaption>
+                </figure>
+
+                <figure class="chart">
+                    <img src="images/plos_vs_mortality.png"
+                        alt="Distribution of post-procedure length of stay stratified by in-hospital mortality status">
+                    <figcaption>
+                        Figure 7.2.2. Post‑procedure length of stay (PLOS) by in‑hospital mortality status (is_death = 0
+                        vs 1), highlighting prolonged post‑operative stays in the mortality group.
+                    </figcaption>
+                </figure>
+            </div>
+            <h3>7.3. Length of Stay and Complications</h3>
+            <p>
+                Length of stay (LOS) was analysed in relation to post-operative complication status to assess the impact
+                of complications on hospital utilisation. Two LOS measures were considered: <strong>total visit length
+                    of stay</strong> and <strong>post-procedure length of stay (PLOS)</strong>.
+            </p>
+
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/los_vs_complication.png"
+                        alt="Distribution of total length of stay stratified by occurrence of post-operative complications">
+                    <figcaption>
+                        Figure 7.3.1. Total LOS by post‑operative complication status (is_complication_happened = 0 vs
+                        1), with longer stays observed when complications occurred.
+                    </figcaption>
+                </figure>
+
+                <figure class="chart">
+                    <img src="images/plos_vs_complicatons.png"
+                        alt="Distribution of post-procedure length of stay stratified by occurrence of post-operative complications">
+                    <figcaption>
+                        Figure 7.3.2. PLOS by post‑operative complication status (is_complication_happened = 0 vs 1),
+                        demonstrating extended post‑procedure stays in complicated cases.
+                    </figcaption>
+                </figure>
+            </div>
+            <p>
+                Overall, both total LOS and post-procedure LOS were consistently <strong>longer among patients who
+                    developed complications</strong>, demonstrating a strong association between post-operative
+                complications and increased inpatient hospital stay. These findings underscore the <strong>significant
+                    resource burden</strong> imposed by complications and highlight the importance of <strong>preventive
+                    strategies and early complication management</strong> to reduce prolonged hospitalisation.
+            </p>
+            <h3>7.4. Length of Stay and Readmission</h3>
+            <p>
+                The relationship between length of stay (LOS) and 30-day readmission was examined to assess whether
+                longer index hospitalisations were associated with an increased likelihood of subsequent inpatient
+                readmission. Both <strong>total visit length of stay</strong> and <strong>post-procedure length of stay
+                    (PLOS)</strong> were analysed in relation to readmission status.
+            </p>
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/los_vs_readmission.png"
+                        alt="Distribution of total length of stay stratified by 30-day readmission status">
+                    <figcaption>
+                        Figure 7.4.1. Total LOS by 30‑day readmission status (is_readmitted = 0 vs 1), suggesting that
+                        patients who were readmitted often had longer index admissions.
+                    </figcaption>
+                </figure>
+
+                <figure class="chart">
+                    <img src="images/plos_vs_readmission.png"
+                        alt="Distribution of post-procedure length of stay stratified by 30-day readmission status">
+                    <figcaption>
+                        Figure 7.4.2. PLOS by 30‑day readmission status (is_readmitted = 0 vs 1), indicating that
+                        prolonged post‑operative stays were associated with subsequent readmissions.
+                    </figcaption>
+                </figure>
+            </div>
+            <p>
+                Overall, these findings suggest a meaningful association between <strong>prolonged length of stay during
+                    the index admission</strong>—particularly post-procedure LOS—and subsequent 30-day readmission.
+                Extended hospitalisation may serve as a marker of post-operative complexity or incomplete recovery,
+                highlighting the importance of targeted discharge planning and post-discharge follow-up for patients
+                with longer initial stays.
+            </p>
+
+
+
+
+        </section>
+
+
+        <section id="references" class="report-card">
+            <h2>8. References</h2>
+            <ol style="padding-left: 20px; line-height: 1.6; font-size: 0.9rem;">
+                <li id="ref1">
+                    Engelman, Daniel T., Walid Ben Ali, Judson B. Williams, et al. "Guidelines for Perioperative Care in
+                    Cardiac
+                    Surgery: Enhanced Recovery After Surgery Society Recommendations." <i>JAMA Surgery</i> 154, no. 8
+                    (2019):
+                    755–766. doi:10.1001/jamasurg.2019.1153.
+                </li>
+                <li id="ref2">
+                    Bridge Cloud. "Bridge Cloud Platform." Miimansa (2024).
+                    Available at: <a href="https://medbridgeai.miimansa.com/" target="_blank"
+                        style="color: var(--accent);">https://medbridgeai.miimansa.com/</a>
+                </li>
+            </ol>
+        </section>
+
+
+        <section id="conclusion" class="report-card">
+            <h2>9. Appendix</h2>
+            <h3>9.1. Biochemical Analytes and Laboratory Markers</h3>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <!-- <th scope="col">Measurement Concept ID</th> -->
+                        <th scope="col">Lab marker / Panel</th>
+                        <th scope="col">Distinct Patient Count</th>
+                        <th scope="col">Distinct Measurement Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <!-- <td>3034426</td> -->
+                        <td>Prothrombin Time (PT)</td>
+                        <td>1139</td>
+                        <td>8971</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>42868738</td> -->
+                        <td>Creatinine in Peritoneal Fluid / Creatinine in Serum</td>
+                        <td>1141</td>
+                        <td>8193</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3049746</td> -->
+                        <td>Glucose IV (dose mass)</td>
+                        <td>1126</td>
+                        <td>4313</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3034022</td> -->
+                        <td>Lactate dehydrogenase panel – serum or plasma</td>
+                        <td>1071</td>
+                        <td>2653</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>40765586</td> -->
+                        <td>Glycosylated hemoglobin (long‑term glucose)</td>
+                        <td>1070</td>
+                        <td>1881</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3041944</td> -->
+                        <td>aPTT (activated partial thromboplastin time) ratio</td>
+                        <td>864</td>
+                        <td>1614</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3027193</td> -->
+                        <td>Lactate Dehydrogenase – urine</td>
+                        <td>684</td>
+                        <td>1254</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3018056</td> -->
+                        <td>Glucose PO (dose mass)</td>
+                        <td>322</td>
+                        <td>510</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>40761507</td> -->
+                        <td>Platelet Morphology Panel – blood</td>
+                        <td>377</td>
+                        <td>428</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>1988947</td> -->
+                        <td>Procalcitonin – Serum / Plasma</td>
+                        <td>105</td>
+                        <td>181</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>40762141</td> -->
+                        <td>Lactate / Pyruvate Ratio – Blood</td>
+                        <td>94</td>
+                        <td>107</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3002937</td> -->
+                        <td>Fibrinogen – Platelet Poor Plasma</td>
+                        <td>17</td>
+                        <td>31</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3017250</td> -->
+                        <td>Creatinine – Urine</td>
+                        <td>20</td>
+                        <td>23</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>40760092</td> -->
+                        <td>Proline / Creatinine Ratio – 24‑h Urine</td>
+                        <td>19</td>
+                        <td>22</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3032932</td> -->
+                        <td>Creatinine – 24‑h Urine (mass or moles)</td>
+                        <td>18</td>
+                        <td>21</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3019210</td> -->
+                        <td>Glucose – Body Fluid</td>
+                        <td>14</td>
+                        <td>19</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3008338</td> -->
+                        <td>Lactate Dehydrogenase – Body Fluid</td>
+                        <td>12</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>36307891</td> -->
+                        <td>Screening Panel</td>
+                        <td>9</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3020682</td> -->
+                        <td>Albumin / Creatinine Ratio – Urine</td>
+                        <td>7</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3038383</td> -->
+                        <td>Fibrin D‑dimer – Titer</td>
+                        <td>7</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3001123</td> -->
+                        <td>Platelet Mean Volume – Blood</td>
+                        <td>6</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3010476</td> -->
+                        <td>Phosphoserine / Creatinine Ratio – Urine</td>
+                        <td>6</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3021337</td> -->
+                        <td>Troponin I (Cardiac) – Serum / Plasma</td>
+                        <td>6</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3000483</td> -->
+                        <td>Glucose – blood</td>
+                        <td>3</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3038276</td> -->
+                        <td>Urea / Creatinine Ratio – Urine</td>
+                        <td>2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3015823</td> -->
+                        <td>Fibrin D‑dimer – presence</td>
+                        <td>2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3038404</td> -->
+                        <td>Protein / Creatinine Ratio – 24‑h Urine</td>
+                        <td>2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3037791</td> -->
+                        <td>Protein / Creatinine Mass Ratio – 24‑h Urine</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3049242</td> -->
+                        <td>Von Willebrand Panel – Platelet Poor Plasma</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>36303398</td> -->
+                        <td>Protein S antigen panel – Platelet Poor Plasma</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <!-- <td>3020287</td> -->
+                        <td>Protein C activity – Platelet Poor Plasma</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3>9.2. Cohort Identification</h3>
+            <p>
+                CVTS-related hospital admissions were identified by linking visit occurrence records with:
+            </p>
+            <ul>
+                <li>
+                    Standardized procedure codes representing cardiovascular and thoracic surgical interventions, and
+                </li>
+                <li>
+                    Department-level tags indicating care delivery within the CVTS service.
+                </li>
+            </ul>
+            <p>
+                Only inpatient visits associated with at least one qualifying CVTS procedure were included in the
+                analysis.
+            </p>
+        </section>
+    </main>
+    <style>
+        /* Animation to flash the reference yellow when clicked */
+        @keyframes highlight-fade {
+            0% {
+                background-color: rgba(244, 125, 36, 0.3);
+            }
+
+            /* Your accent color */
+            100% {
+                background-color: transparent;
+            }
+        }
+
+        .target-highlight {
+            animation: highlight-fade 2s ease-out;
+            border-radius: 4px;
+            /* Optional rounded corners */
+            padding: 4px;
+            /* Adds a little breathing room for the highlight */
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 1. Select all links that start with '#' (internal anchors)
+            const anchors = document.querySelectorAll('a[href^="#"]');
+
+            anchors.forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    // Get the target ID (e.g., "ref1")
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        e.preventDefault(); // Stop the instant jump
+
+                        // 2. Scroll the element to the CENTER of the viewport
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+
+                        // 3. Add a temporary highlight effect
+                        targetElement.classList.remove('target-highlight'); // reset if already active
+                        void targetElement.offsetWidth; // trigger reflow to restart animation
+                        targetElement.classList.add('target-highlight');
+
+                        // Optional: Update URL hash without jumping
+                        history.pushState(null, null, '#' + targetId);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
