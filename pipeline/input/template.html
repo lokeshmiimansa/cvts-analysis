@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVTS REPORT</title>
+    <style>
+        :root {
+            --accent: #f47d24;
+            --text: #222222;
+            --bg: #f5f5f5;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        p {
+            text-align: justify;
+        }
+
+        /* header layout - COLUMN LAYOUT FOR 2 LINES */
+        .top-bar {
+            display: flex;
+            flex-direction: column;
+            /* Stacks Brand (top) and Nav (bottom) */
+            justify-content: center;
+            padding: 8px 48px;
+            /* Very tight padding for compact size */
+            background: var(--white);
+            border-bottom: 4px solid var(--accent);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* left side: logos + title (Line 1) */
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            align-self: flex-start;
+            /* Aligns branding to the LEFT */
+            margin-bottom: 0;
+            /* No extra space below */
+            width: 100%;
+        }
+
+        .brand-logos {
+            display: flex;
+            flex-direction: column;
+            /* Keeps logos stacked top/bottom */
+            gap: 2px;
+            /* Tight gap */
+        }
+
+        .brand-logo {
+            width: 120px;
+            /* Made smaller to reduce header height */
+            height: auto;
+        }
+
+        /* vertical accent line */
+        .brand-divider {
+            width: 2px;
+            height: 30px;
+            /* Adjusted to match smaller logo stack */
+            background: var(--accent);
+            border-radius: 999px;
+        }
+
+        .report-name {
+            margin: 0;
+            font-family: "Montserrat", system-ui, sans-serif;
+            font-size: 1rem;
+            /* Smaller font for compact header */
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            line-height: 1.1;
+        }
+
+        /* nav links (Line 2) - Right Aligned */
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            font-weight: 500;
+            width: 100%;
+            /* Spans full width */
+            justify-content: center;
+            /* Aligns links to the RIGHT */
+            padding-top: 4px;
+            /* Minimal separation from line 1 */
+            border-top: none;
+            font-size: 0.9rem;
+            /* Slightly smaller text */
+        }
+
+        .nav-links a {
+            position: relative;
+            text-decoration: none;
+            color: var(--accent);
+            font-size: 0.98rem;
+        }
+
+        /* subtle underline hover */
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.2s ease-out;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* page title section */
+        main {
+            max-width: 960px;
+            margin: 48px auto;
+            padding: 32px 40px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        main h2 {
+            text-align: left;
+            margin: 0;
+            font-family: "Montserrat", system-ui, sans-serif;
+        }
+
+        /* report title */
+        .report-name {
+            margin: 0;
+            font-family: "Montserrat", system-ui, sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .report-main {
+            max-width: 100%;
+            margin: 32px 0 64px;
+            padding: 0 64px 32px;
+            /* side + bottom padding */
+            background: #f5f5f5;
+            /* light page background */
+            box-sizing: border-box;
+        }
+
+        /* individual cards */
+        .report-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-top: 24px;
+            box-shadow: 0 10px 24px rgba(54, 53, 53, 0.06);
+        }
+
+        /* spacing rhythm between cards */
+        .report-card+.report-card {
+            margin-top: 24px;
+        }
+
+        /* headings and text inside cards */
+        .report-card h2 {
+            margin: 0 0 12px;
+            font-size: 1.25rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #070300;
+        }
+
+        .report-card p {
+            margin: 0;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: #333333;
+        }
+
+        .summary-table {
+            border-collapse: collapse;
+            width: 100%;
+            padding: 2%;
+            font-size: 0.95rem;
+            background-color: #e8e8e89f;
+        }
+
+        .summary-table caption {
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 6px;
+            background-color: #dddddd;
+        }
+
+        /* 1. General Rule: Default to Right Alignment (for numbers) */
+        .summary-table th,
+        .summary-table td {
+            text-align: right;
+            /* Numeric values and numeric headers go right */
+            padding: 6px 12px;
+            /* Adjusted padding for better readability */
+            border-bottom: 1px solid #e0e0e0;
+            /* Optional: adds subtle separation */
+        }
+
+        /* 2. Specific Rule: First Column Only (for text labels) */
+        .summary-table th:first-child,
+        .summary-table td:first-child {
+            text-align: left;
+            /* Text labels and text headers go left */
+        }
+
+        /* Optional: Ensure the caption stays centered or left as preferred */
+        .summary-table caption {
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 8px;
+            padding: 8px;
+            background-color: #dddddd;
+        }
+
+        /* light bottom line between tbody blocks */
+        .summary-table tbody.section {
+            border-top: 1px solid #dddddd;
+            margin-top: 4px;
+            /* visual gap (via border) */
+        }
+
+        .chart {
+            margin: 24px auto;
+            text-align: center;
+        }
+
+        .chart img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .figure-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: space-between;
+        }
+
+        /* each figure takes full row width */
+        .figure-row .chart {
+            flex: 1 1 100%;
+            /* Changed from 50% to 100% for full width */
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .figure-row .chart img {
+            width: 100%;
+            /* scale image down to fit */
+            height: auto;
+            display: block;
+        }
+
+        .chart figcaption {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #555555;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Interactive Plot Styles */
+        .interactive-container {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .control-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .control-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .control-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(244, 125, 36, 0.2);
+        }
+
+        #plot-frame {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            display: block;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const procSelect = document.getElementById('procedure-select');
+            const measureSelect = document.getElementById('measure-select');
+            const plotFrame = document.getElementById('plot-frame');
+            function updatePlot() {
+                const procId = procSelect.value;
+                const measureId = measureSelect.value;
+                if (procId && measureId) {
+                    // Constructs URL: plots/PROCEDUREID_MEASUREMENTID.html
+                    // You can change the extension to .png or .jpg if you are serving static images instead.
+                    const plotUrl = `plot/${procId}_${measureId}.html`;
+                    plotFrame.src = plotUrl;
+                }
+            }
+            procSelect.addEventListener('change', updatePlot);
+            measureSelect.addEventListener('change', updatePlot);
+        });
+    </script>
+
+</head>
+
+<body>
+    <div id="password-overlay">
+        <div class="login-box">
+            <div class="brand-block" style="justify-content: center; margin-bottom: 20px;">
+                <div class="brand-logos" style="flex-direction: row; align-items: center;">
+                    <img src="images/bridgecloud.svg" alt="Bridge Cloud" class="brand-logo"
+                        style="height: 40px; width: auto;">
+                    <div style="width: 2px; height: 30px; background: #f47d24; margin: 0 10px;"></div>
+                    <img src="images/miimansa.svg" alt="Miimansa" class="brand-logo" style="height: 40px; width: auto;">
+                </div>
+            </div>
+            <h2 style="text-align: center; color: var(--text); margin-top: 0;">Restricted Access</h2>
+            <p style="text-align: center; margin-bottom: 20px;">Please enter the password to view this report.</p>
+
+            <input type="password" id="password-input" placeholder="Enter Password" onkeyup="checkForEnter(event)">
+            <p id="error-message">Incorrect password</p>
+            <button onclick="checkPassword()">View Report</button>
+        </div>
+    </div>
+
+    <style>
+        /* Stop the page from scrolling while locked */
+        body.locked {
+            overflow: hidden;
+        }
+
+        /* Overlay Styles */
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f5f5f5;
+            /* Matches your bg variable */
+            z-index: 99999;
+            /* Sits on top of everything */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            border-top: 4px solid #f47d24;
+            /* Matches your accent */
+        }
+
+        #password-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            /* Ensures padding doesn't break width */
+        }
+
+        #password-input:focus {
+            outline: none;
+            border-color: #f47d24;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #f47d24;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .login-box button:hover {
+            background-color: #d66a1b;
+        }
+
+        #error-message {
+            color: red;
+            font-size: 0.9rem;
+            display: none;
+            /* Hidden by default */
+            text-align: center;
+            margin-top: -5px;
+            margin-bottom: 15px;
+        }
+    </style>
+
+    <script>
+        // 1. SET YOUR PASSWORD HERE
+        const reportPassword = "sgpgi2025";
+
+        // Lock body scroll immediately
+        document.body.classList.add('locked');
+
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            const errorMsg = document.getElementById('error-message');
+            const overlay = document.getElementById('password-overlay');
+
+            if (input === reportPassword) {
+                // Unlock
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    document.body.classList.remove('locked');
+                }, 300); // smooth fade out
+            } else {
+                // Show error
+                errorMsg.style.display = 'block';
+                document.getElementById('password-input').value = '';
+            }
+        }
+
+        // Allow pressing "Enter" key
+        function checkForEnter(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <header class="top-bar">
+        <div class="brand-block">
+            <div class="brand-logos">
+                <img src="images/bridgecloud.svg" alt="Bridge Cloud" class="brand-logo">
+                <img src="images/miimansa.svg" alt="Miimansa" class="brand-logo">
+            </div>
+            <div class="brand-divider"></div>
+            <h1 class="report-name">
+                CVTS Outcomes and Length of Stay (LOS): <br>
+                Data
+                Visualization and Preliminary Analysis of Observational Data from a Tertiary Care Facility
+            </h1>
+        </div>
+
+        <nav class="nav-links">
+            <a href="#intro">Introduction</a>
+            <a href="#objective">Objective</a>
+            <a href="#data">Data</a>
+            <a href="#methods">Methods</a>
+            <a href="#results">Results</a>
+            <a href="#conclusion">Conclusion</a>
+        </nav>
+    </header>
+
+
+    <main class="report-main">
+        <p style="text-align: right; color: #888; font-size: 0.8rem;">Generated on: {{ generation_date }}</p>
+
+        <section id="intro" class="report-card">
+            <h2>Scope and Intent of the Current Analysis</h2>
+            <p> This report is based on CVTS patient data available for the period <strong>2023–2024.</strong> Using
+                this dataset, we
+                have implemented a
+                set of <strong>foundational analyses and visualizations</strong> aimed at examining potential
+                relationships
+                between <strong>clinical
+                    outcomes and length of stay (LoS).</strong>
+                The analyses presented here are illustrative in nature and are intended to demonstrate the types of
+                exploratory
+                workflows, data transformations, and visual representations that can be supported using the available
+                CVTS data. <strong>No
+                    clinical conclusions or causal inferences regarding outcome–LoS relationships are intended or
+                    implied</strong>
+                based on the
+                results shown in this report.
+                Rather, this work should be viewed as <strong>preparatory groundwork</strong>, establishing a
+                reproducible analytical
+                framework and
+                visualization toolkit. With this foundation in place, the same methodologies can be readily applied to
+                the <strong>2024–2025
+                    CVTS dataset</strong> once access is available, enabling more comprehensive and longitudinal
+                analyses in
+                subsequent phases.</p>
+        </section>
+
+        <section id="intro" class="report-card">
+            <h2>1. Introduction</h2>
+            <p>
+                Implementing Enhanced Recovery After Surgery (ERAS) protocols in cardiovascular and thoracic surgery
+                (CVTS) is
+                critical for optimizing recovery, yet these standards must be adapted using rigorous,
+                population-specific data <a href="#ref1"
+                    style="text-decoration: none; color: var(--accent); font-weight: bold;">[1]</a>.
+                To the best of our knowledge, this report presents the first extensive characterization of CVTS outcomes
+                and their
+                association with Length of Stay (LOS) within an Indian patient population. By leveraging real-world
+                clinical data,
+                we aim to inform data-driven rehabilitation definitions that bridge the gap between global guidelines
+                and local
+                clinical reality.
+            </p>
+        </section>
+
+        <section id="objective" class="report-card">
+            <h2>2. Objective</h2>
+            <p>
+                The purpose of the visualization and analysis is to understand <strong>the relationship between
+                    post-operative
+                    Length of Stay (LOS) and patient outcomes</strong> in the Cardiovascular and Thoracic Surgery (CVTS)
+                department using observational data derived from the OMOP Common Data Model. The data in the SGPGIMS
+                database
+                for the period 2023-24 was extracted, transformed, standardized and loaded into the OMOP Common Data
+                Model.
+            </p>
+            <p>
+                Specifically, this analysis targets the following questions:
+            </p>
+            <ul align="justify">
+                <li>
+                    <strong>Whether shorter post-surgical hospital stays are associated with comparable or improved
+                        clinical
+                        outcomes</strong> when measured against existing post-operative care guidelines?
+                </li>
+                <li>
+                    What are the relationships between varying LOS categories and outcome indicators such as
+                    post-discharge
+                    complications, readmissions, mortality, and need for re-intervention?
+                </li>
+                <li>
+                    <strong>Which are the patient sub-groups</strong> (based on age, procedure type, comorbidities, and
+                    peri-operative risk factors) for whom early discharge may be clinically safe and effective?
+                </li>
+                <li>
+                    <strong>What are the implications of the visualizations and analysis for current guideline-driven
+                        LOS
+                        recommendations?</strong>
+                </li>
+            </ul>
+            <p>
+                This visualization and analysis uses observational, longitudinal, standardized clinical data from
+                1147 CVTS patients giving data based insights on relationships between LOS and patient outcomes.
+                Controlled
+                studies and further statistical analysis will be needed before drawing any definitive conclusions.
+            </p>
+        </section>
+
+
+        <section id="data" class="report-card">
+            <h2>3. Data</h2>
+            <p>The dataset belongs to patient undergone Cardio Vascular Thoracic Surgery for headcount of 1147, the
+                total visit occurrence was 9433 with cumulative IPD admissions of 1580.</p>
+            <h3>3.1. Summary Statistics</h3>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Metric</th>
+                        <th scope="col">Analysis Cohort</th>
+                        <th scope="col">Value(all)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in summary_rows %}
+                    <tr>
+                        <th scope="row">{{ row['metric'] }}</th>
+                        <td>{{ row['Analysis Cohort'] }}</td>
+                        <td>{{ row['Value(all)'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h3>3.2. Surgical Procedures Frequencies</h3>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Procedure Name</th>
+                        <th scope="col">Distinct Patient Count</th>
+                        <th scope="col">Distinct Procedure Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in procedure_rows %}
+                    <tr>
+                        <td>{{ row['Procedure Name'] }}</td>
+                        <td>{{ row['Distinct Patient Count'] }}</td>
+                        <td>{{ row['Distinct Procedure Count'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h3>3.3. Frequency by Procedure and Tests done</h3>
+            <div style="overflow-x: auto;">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Procedure</th>
+                            <th scope="col">Prothrombin time (PT)</th>
+                            <th scope="col">Hemoglobin</th>
+                            <th scope="col">Platelets panel</th>
+                            <th scope="col">Creatinine Ratio</th>
+                            <th scope="col">Potassium</th>
+                            <th scope="col">Sodium</th>
+                            <th scope="col">Urea Urine</th>
+                            <th scope="col">Urea Nitrogen</th>
+                            <th scope="col">Lipid panel</th>
+                            <th scope="col">Glucose IV</th>
+                            <th scope="col">LDH Panel</th>
+                            <th scope="col">Glycosylated Haemoglobin</th>
+                            <th scope="col">aPTT Ratio</th>
+                            <th scope="col">LDH Urine</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in lab_freq_rows %}
+                        <tr>
+                            <td>{{ row['Procedure'] }}</td>
+                            <td>{{ row['Prothrombin time (PT)'] }}</td>
+                            <td>{{ row['Hemoglobin'] }}</td>
+                            <td>{{ row['Platelets panel'] }}</td>
+                            <td>{{ row['Creatinine Ratio'] }}</td>
+                            <td>{{ row['Potassium'] }}</td>
+                            <td>{{ row['Sodium'] }}</td>
+                            <td>{{ row['Urea Urine'] }}</td>
+                            <td>{{ row['Urea Nitrogen'] }}</td>
+                            <td>{{ row['Lipid panel'] }}</td>
+                            <td>{{ row['Glucose IV'] }}</td>
+                            <td>{{ row['LDH Panel'] }}</td>
+                            <td>{{ row['Glycosylated Haemoglobin'] }}</td>
+                            <td>{{ row['aPTT Ratio'] }}</td>
+                            <td>{{ row['LDH Urine'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <section id="methods" class="report-card">
+            <h2>4. Methods</h2>
+
+            <h3>4.1. Study Design and Data Source</h3>
+            <p>
+                This retrospective cohort study utilized structured electronic health record (EHR) data from the
+                <strong>Cardiovascular and Thoracic Surgery (CVTS)</strong> department, covering the period from
+                <strong>January 2023 to May 2024</strong>. All source data were standardized and harmonized using the
+                <strong>OMOP Common Data Model (CDM)</strong> to enable consistent longitudinal analysis across clinical
+                domains.
+            </p>
+
+
+
+
+            <h3>4.2. Length of Stay Assessment</h3>
+            <p>
+                Length of Stay (LOS) was calculated for each CVTS admission as the difference between admission date and
+                discharge date recorded in the <code>visit occurrence</code> table. LOS was treated as a continuous
+                variable
+                and subsequently categorized into clinically meaningful strata aligned with post-operative care
+                practices
+                and guideline-based expectations.
+            </p>
+
+            <h3>4.3. Cohort Selection and Data Completeness</h3>
+            <p>
+                The initial data extraction identified a total of <strong>1,147 patients</strong>. However, <strong>128
+                    of these
+                    patients</strong> were excluded from the analysis because they did not undergo any of the 9 specific
+                surgeries
+                selected for this study.
+            </p>
+            <p>
+                To ensure the results are accurate and relevant, the final study cohort was restricted to the remaining
+                <strong>1,019 patients</strong>. All subsequent tables and charts in this report are based on this
+                group.
+            </p>
+            <h3>4.4. Clinical Measurement Selection</h3>
+            <p>
+                Laboratory and clinical measurement data were extracted from the <code>measurement</code> table and
+                filtered
+                to retain Lab markers considered relevant to post-operative recovery and Enhanced Recovery After Surgery
+                (<strong>ERAS</strong>) pathways. These included markers spanning:
+            </p>
+            <ul>
+                <li>Pre-operative baseline assessment</li>
+                <li>Post-operative recovery and complication monitoring</li>
+            </ul>
+            <p>
+                Selection of Lab markers and temporal windows was informed by published ERAS and LOS-related literature,
+                ensuring clinical relevance and interpretability.
+            </p>
+
+            <h3>4.5. Outcomes</h3>
+            <p>
+                <strong>Primary clinical outcomes</strong> were derived using standardized OMOP domain tables as
+                follows:
+            </p>
+            <ul>
+                <li>
+                    <strong>30-day readmission:</strong> Defined as any inpatient visit occurring within 30 days of
+                    discharge from the index CVTS admission.
+                </li>
+                <li>
+                    <strong>30-day post-operative mortality:</strong> Determined using death records occurring within
+                    30 days of the index discharge date.
+                </li>
+                <li>
+                    <strong>Re-surgery:</strong> Identified as any subsequent CVTS-related procedure occurring after the
+                    index surgery.
+                </li>
+            </ul>
+            <p>
+                <strong>Secondary clinical outcomes</strong> were derived using standardized OMOP domain tables as
+                follows:
+            </p>
+            <ul>
+                <li>
+                    <strong>Measurements:</strong> We studied Lab marker analysis with different procedures and how the
+                    trends vary from one procedure to another for each
+                    Lab marker.
+                </li>
+
+            </ul>
+
+            <h3>4.5. Exploratory Data Analysis</h3>
+
+            <p>
+                Exploratory data analysis (EDA) was performed to characterise patient demographics, clinical variables,
+                and outcome distributions within the CVTS cohort. Particular emphasis was placed on examining
+                the relationship between <strong>Length of Stay (LOS)</strong> and key post-operative outcomes.
+            </p>
+
+            <p>
+                Outcomes were evaluated in relation to Length of Stay to assess whether variations in post-operative LOS
+                were associated with differences in clinical outcomes. Comparative analyses were conducted across LOS
+                strata to identify patterns suggestive of safe early discharge versus increased risk profiles.
+            </p>
+
+            <p>
+                All analyses were performed using OMOP-standardized data structures to ensure transparency,
+                reproducibility, and alignment with real-world evidence best practices.
+            </p>
+
+            <h3>4.6. Ethical and Data Governance Considerations</h3>
+
+            <p>
+                All data used in this study were de-identified using the <strong>PrivacyBridgeAI</strong>
+                <a href="#ref2" style="text-decoration: none; color: var(--accent); font-weight: bold;">[2]</a>
+                prior to analysis. The study involved retrospective analysis of routinely collected clinical data
+                processed on the <strong>Bridge Cloud</strong> platform
+                <a href="#ref3" style="text-decoration: none; color: var(--accent); font-weight: bold;">[3]</a>
+                and did not influence patient care decisions.
+            </p>
+
+
+        </section>
+
+        <section id="data-analysis" class="report-card">
+            <h2>5. Data Analysis</h2>
+            <h3>5.1. Mortality Rate</h3>
+            <p>
+                Mortality was assessed overall and by gender for the <strong>1,019 patients</strong> in the analysis
+                cohort who
+                underwent cardiovascular and
+                thoracic surgery.
+            </p>
+
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Total Patients</th>
+                        <th scope="col">Deaths</th>
+                        <th scope="col">Mortality (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in mortality_rows %}
+                    <tr>
+                        <th scope="row">{{ row['Gender'] }}</th>
+                        <td>{{ row['Total Patients'] }}</td>
+                        <td>{{ row['Deaths'] }}</td>
+                        <td>{{ row['Mortality (%)'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/mortality_age_categorisation.png" alt="Age distribution of patients who died">
+                    <figcaption>
+                        Figure 5.1.1. Mortality rate by age class, calculated as the percentage of patients within each
+                        age group who did not survive.
+                        age groups.
+                    </figcaption>
+                </figure>
+                <figure class="chart">
+                    <img src="images/days_from_procedure_to_death_hist.png"
+                        alt="Distribution of days from procedure to death" id="figure-5-1-2">
+                    <figcaption>
+                        Figure 5.1.2. Distribution of days from procedure to death across the full observation period.
+                    </figcaption>
+                </figure>
+            </div>
+
+
+            <h3>5.2. Length of Stay</h3>
+            <p>
+                Overall, LOS demonstrated a right-skewed distribution, with the majority of patients being discharged
+                within the first few weeks following surgery. The mean LOS was 14.5 days, while the median LOS was 11.0
+                days, indicating that a relatively small subset of patients experienced prolonged hospitalizations,
+                thereby increasing the overall average LOS.
+            </p>
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/percentage_distribution_los.png" alt="Age distribution of patients who died">
+                    <figcaption>Figure 5.2.1. Distribution of length of stay (LOS) for all patients, showing
+                        that most patients were discharged within the first few weeks </figcaption>
+                </figure>
+                <figure class="chart">
+                    <img src="images/length of each patient.png" alt="Length of Stay of Each Patient"></img>
+                    <figcaption>Figure 5.2.2. Length of stay (LOS) by gender, comparing the number of male and female
+                        patients across stay durations.</figcaption>
+                </figure>
+                <figure class="chart">
+                    <img src="images/Median_los_with_procedure.png" alt="Average Length of Stay upon each Procedure">
+                    <figcaption>Figure 5.2.3. Median length of stay for each surgical procedure. </figcaption>
+                </figure>
+                <p><i>Analysis: "Repair of tetralogy of fallot" surgeries resulted in the longest average hospital stay
+                        (43 days), while "Replacement of mitral valve" had the shortest average stay of 14 days among
+                        the analyzed procedures.</i></p>
+                <p>
+
+                </p>
+            </div>
+            <h3>5.3. Re-Admission</h3>
+            <p>
+                Thirty-day readmission was assessed for all CVTS discharges by identifying subsequent inpatient visits
+                recorded in the OMOP visit occurrence table and linking them back to the index surgical admission. The
+                primary objective was to evaluate time to readmission and examine whether earlier discharge was
+                associated with an increased likelihood of unplanned hospital return.
+            </p>
+            <p>
+                Analysis of the study cohort (N = 1,019) indicated that a total of 79 patients were readmitted
+                within 30 days of discharge, corresponding to an overall 30-day readmission rate of 7.76%.
+            </p>
+            <p>
+                The distribution of time to readmission (0–90 days) showed a pronounced concentration of readmissions
+                occurring shortly after discharge, with a gradual tapering over time. A substantial proportion of
+                readmissions occurred within the first 30 days, as highlighted by the vertical threshold line,
+                indicating a period of heightened vulnerability following discharge. Beyond 30 days, readmissions were
+                more dispersed, suggesting a mix of delayed postoperative complications and disease progression rather
+                than immediate post-surgical issues.
+            </p>
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/readmission.png" alt="Age distribution of patients who died">
+                    <figcaption>Figure 5.3.1: Distribution of Time to Readmission (0–90 Days) Histogram showing the
+                        frequency of patient returns relative to days post-discharge.</figcaption>
+                </figure>
+                <figure class="chart">
+                    <img src="images/readmission_categorisation.png" alt="Age distribution of patients who died">
+                    <figcaption>Figure 5.3.2: Proportion of Readmissions by Category Breakdown of patient readmissions
+                        classified as Early (≤30 days), Normal, or Late.</figcaption>
+                </figure>
+                <figure class="chart">
+                </figure>
+            </div>
+            <p>
+                To further characterise this pattern, readmissions were categorised into early (≤30 days), normal (31–90
+                days), and late (>90 days) groups. Early readmissions constituted the largest share, accounting for
+                45.1% of all readmitted patients, followed by normal readmissions at 28.1%, and late readmissions at
+                26.8%. The predominance of early readmissions suggests that nearly half of hospital returns occurred
+                during the immediate post-discharge phase, a period commonly associated with surgical complications,
+                inadequate recovery, or suboptimal discharge planning.
+            </p>
+
+        </section>
+
+
+        <section id="results" class="report-card">
+            <h2>6. Results</h2>
+            <h3>6.1. Peri‑Operative Lab marker Trends Analysis</h3>
+            <p>
+                For each of the nine index procedures, patient‑level line plots were generated for all study Lab markers
+                (for example, creatinine in peritoneal fluid/serum, lactate, troponin, coagulation and electrolyte
+                markers). Measurements were time‑aligned to the day of surgery (t = 0), so that both pre‑operative (t
+                &lt; 0) and post‑operative (t &gt; 0) trajectories could be visualised on the same scale.
+            </p>
+            <p>
+                Plots were produced in batches of 25 patients per procedure, with a vertical dashed line marking the
+                procedure time and horizontal reference bands showing expected ranges. These peri‑operative profiles
+                were used to screen for Lab marker excursions after surgery, compare patterns across procedures, and
+                identify markers associated with prolonged length of stay, complications or 30‑day readmission.
+            </p>
+
+            <h3>6.2.1. Interactive Lab marker Analysis</h3>
+            <div class="interactive-container">
+
+                <p>Select a procedure and a measurement to view the specific analysis plot.</p>
+                <div class="control-row">
+                    <div class="control-group">
+                        <label for="procedure-select">Procedure</label>
+                        <select id="procedure-select">
+                            <option value="">-- Select Procedure --</option>
+                            <option value="4012932">Atrioseptoplasty (4012932)</option>
+                            <option value="4019929">Repair of tetralogy of Fallot (4019929)</option>
+                            <option value="4095407">Replacement of aortic valve (4095407)</option>
+                            <option value="4203153">Replacement of mitral valve (4203153)</option>
+                            <option value="4284104">Aortocoronary artery bypass graft (4284104)</option>
+                            <option value="4294387">Correction of ventricular septal defect (4294387)</option>
+                            <option value="4302815">Robot assisted laparoscopic coronary artery bypass (4302815)
+                            </option>
+                            <option value="4304688">Double valve replacement (4304688)</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="measure-select">Measurement (Lab marker)</label>
+                        <select id="measure-select">
+                            <option value="">-- Select Measurement --</option>
+                            <option value="3034426">Prothrombin time (PT)</option>
+                            <option value="42868738">Creatinine in peritoneal fluid / Serum</option>
+                            <option value="3049746">Glucose IV (dose mass)</option>
+                            <option value="3034022">Lactate dehydrogenase panel</option>
+                            <option value="40765586">Glycosylated hemoglobin</option>
+                            <option value="3041944">aPTT ratio</option>
+                            <option value="3027193">Lactate dehydrogenase – urine</option>
+                            <option value="3034426">Prothrombin time (PT)</option>
+                            <option value="3005872">Hemoglobin [Presence] in Blood</option>
+                            <option value="3050583">Platelets panel - Blood by Automated count</option>
+                            <option value="42868738">Creatinine in peritoneal fluid/Creatinine in serum</option>
+                            <option value="36305724">Potassium [Mass/volume] in Specimen</option>
+                            <option value="36303488">Sodium [Mass/mass] in Specimen</option>
+                            <option value="3034734">Urea [Mass/volume] in Urine</option>
+                            <option value="40762632">Urea nitrogen [Moles/volume] in Blood</option>
+                            <option value="1761868">Lipid panel - Serum or Plasma</option>
+                        </select>
+                    </div>
+                </div>
+                <iframe id="plot-frame" src="about:blank" title="Data Analysis Plot"></iframe>
+            </div>
+        </section>
+
+        <section id="conclusion" class="report-card">
+            <h2>7. Conclusion (To be Decided)</h2>
+
+            <p>
+                This report represents an initial <strong>Exploratory Data Analysis (EDA)</strong> aimed at identifying
+                patterns
+                in the clinical data. The findings below highlight potential associations between hospital stay duration
+                and
+                patient outcomes, which serve as a foundation for deeper future investigation.
+            </p>
+
+            <h3>7.1. Timing of Mortality</h3>
+            <p>
+                Our analysis shows that deaths were most frequent in the immediate post-operative period. Specifically,
+                out of
+                90 total deaths, 73 occurred within the first 30 days after surgery. This indicates that the first month
+                is the
+                most critical window for patient survival.
+            </p>
+            <p>
+                Additionally, patients who did not survive tended to have longer and more complex hospital stays
+                compared to
+                those who recovered, as illustrated by the distribution of days from procedure to death below.
+            </p>
+
+            <p>
+                <em>(Refer to <a href="#figure-5-1-2">Figure 5.1.2</a> for the distribution timeline.)</em>
+            </p>
+
+            <h3>7.2. Length of Stay vs. Mortality</h3>
+            <p>
+                We compared hospital stay durations for patients who survived versus those who died. The data suggests
+                that
+                deceased patients generally had longer total and post-procedure stays, often with significant outliers.
+                This
+                pattern likely reflects prolonged medical interventions for complications prior to death.
+            </p>
+
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/los_vs_mortality.png"
+                        alt="Distribution of total length of stay stratified by in-hospital mortality status">
+                    <figcaption>
+                        Figure 7.2.1. Comparison of Total Length of Stay: Patients who died (1) vs. Survivors (0).
+                    </figcaption>
+                </figure>
+
+                <figure class="chart">
+                    <img src="images/plos_vs_mortality.png"
+                        alt="Distribution of post-procedure length of stay stratified by in-hospital mortality status">
+                    <figcaption>
+                        Figure 7.2.2. Comparison of Post-Procedure Stay: Patients who died (1) vs. Survivors (0).
+                    </figcaption>
+                </figure>
+            </div>
+
+            <h3>7.3. Impact of Complications on Stay</h3>
+            <p>
+                There is a clear link between post-operative complications and longer hospitalisation. Patients who
+                experienced
+                complications consistently required more time in the hospital—both in terms of total visit duration and
+                time
+                spent recovering after surgery.
+            </p>
+
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/los_vs_complication.png"
+                        alt="Distribution of total length of stay stratified by occurrence of post-operative complications">
+                    <figcaption>
+                        Figure 7.3.1. Total Length of Stay: Patients with Complications (1) vs. No Complications (0).
+                    </figcaption>
+                </figure>
+
+                <figure class="chart">
+                    <img src="images/plos_vs_complicatons.png"
+                        alt="Distribution of post-procedure length of stay stratified by occurrence of post-operative complications">
+                    <figcaption>
+                        Figure 7.3.2. Post-Procedure Stay: Patients with Complications (1) vs. No Complications (0).
+                    </figcaption>
+                </figure>
+            </div>
+
+            <h3>7.4. Length of Stay and Readmission</h3>
+            <p>
+                Finally, we observed that patients who were readmitted within 30 days often had longer initial hospital
+                stays.
+                This suggests that an extended initial stay may be an indicator of a complex recovery path that carries
+                a higher
+                risk of needing to return to the hospital.
+            </p>
+
+            <div class="figure-row">
+                <figure class="chart">
+                    <img src="images/los_vs_readmission.png"
+                        alt="Distribution of total length of stay stratified by 30-day readmission status">
+                    <figcaption>
+                        Figure 7.4.1. Total Length of Stay: Readmitted Patients (1) vs. Not Readmitted (0).
+                    </figcaption>
+                </figure>
+
+                <figure class="chart">
+                    <img src="images/plos_vs_readmission.png"
+                        alt="Distribution of post-procedure length of stay stratified by 30-day readmission status">
+                    <figcaption>
+                        Figure 7.4.2. Post-Procedure Stay: Readmitted Patients (1) vs. Not Readmitted (0).
+                    </figcaption>
+                </figure>
+            </div>
+
+            <p>
+                <strong>Summary:</strong> While these exploratory observations confirm that prolonged hospitalisation is
+                associated with adverse outcomes (mortality, complications, and readmissions), further analysis is
+                required to
+                determine specific causal factors.
+            </p>
+
+        </section>
+
+
+        <section id="references" class="report-card">
+            <h2>8. References</h2>
+            <ol style="padding-left: 20px; line-height: 1.6; font-size: 0.9rem;">
+                <li id="ref1">
+                    Engelman, Daniel T., Walid Ben Ali, Judson B. Williams, et al. "Guidelines for Perioperative Care in
+                    Cardiac
+                    Surgery: Enhanced Recovery After Surgery Society Recommendations." <i>JAMA Surgery</i> 154, no. 8
+                    (2019):
+                    755–766. doi:10.1001/jamasurg.2019.1153.
+                </li>
+                <li id="ref3">
+                    Shreya, Sanjeet, Naimish et al. "Generation and De-Identification of Indian Clinical Discharge
+                    Summaries
+                    using LLMs."
+                    <i>BioNLP Workshop at ACL 2024</i>. arXiv preprint arXiv:2407.05887 (2024).
+                    Available at: <a href="https://arxiv.org/pdf/2407.05887" target="_blank"
+                        style="color: var(--accent);">https://arxiv.org/pdf/2407.05887</a>
+                </li>
+                <li id="ref2">
+                    Bridge Cloud. "Bridge Cloud Platform." Miimansa (2024).
+                    Available at: <a href="https://medbridgeai.miimansa.com/" target="_blank"
+                        style="color: var(--accent);">https://medbridgeai.miimansa.com/</a>
+                </li>
+
+            </ol>
+        </section>
+
+        <section id="conclusion" class="report-card">
+            <h2>Appendix</h2>
+
+
+            <h3>1. Biochemical Analytes and Laboratory Markers</h3>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Lab marker / Panel</th>
+                        <th scope="col">Distinct Patient Count</th>
+                        <th scope="col">Distinct Measurement Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in lab_appendix_rows %}
+                    <tr>
+                        <td>{{ row['Lab marker / Panel'] }}</td>
+                        <td>{{ row['Distinct Patient Count'] }}</td>
+                        <td>{{ row['Distinct Measurement Count'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h3>2. Cohort Identification</h3>
+            <p>
+                CVTS-related hospital admissions were identified by linking visit occurrence records with:
+            </p>
+            <ul>
+                <li>
+                    Standardized procedure codes representing cardiovascular and thoracic surgical interventions, and
+                </li>
+                <li>
+                    Department-level tags indicating care delivery within the CVTS service.
+                </li>
+            </ul>
+            <p>
+                Only inpatient visits associated with at least one qualifying CVTS procedure were included in the
+                analysis.
+            </p>
+        </section>
+    </main>
+
+
+</body>
+
+</html>
