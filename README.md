@@ -16,3 +16,9 @@ cvts-analysis/
 ├── requirements.txt
 ├── README.md
 ├── .gitignore
+
+
+
+## Architecture Flow (Miro)
+
+[![Miro Diagram](docs/miro/flow.png)]([https://miro.com/app/board/BOARD_ID/](https://miro.com/app/board/uXjVGSbnupk=/))
