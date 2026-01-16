@@ -19,6 +19,11 @@ cvts-analysis/
 
 
 
-## Architecture Flow (Miro)
 
-[![Miro Diagram](docs/miro/flow.png)]([https://miro.com/app/board/BOARD_ID/](https://miro.com/app/board/uXjVGSbnupk=/))
+
+## System Architecture (Miro)
+
+[![System Architecture Diagram](docs/miro/pipeline.png)](https://miro.com/app/board/uXjVGSbnupk=/)
+
+
+
