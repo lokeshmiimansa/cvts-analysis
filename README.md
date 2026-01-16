@@ -21,9 +21,7 @@ cvts-analysis/
 
 
 
-## System Architecture (Miro)
 
-[![System Architecture Diagram](docs/miro/pipeline.png)](https://miro.com/app/board/uXjVGSbnupk=/)
 
 
 
